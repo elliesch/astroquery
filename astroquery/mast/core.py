@@ -624,7 +624,7 @@ class MastClass(QueryWithLogin):
         self._authenticated = False
 
     @class_or_instance
-    def service_request_async(self, service, params, pagesize=None, page=None, **kwargs):
+    def service_request_async(self, service, params, pagesize=None, page=None, rdm=42, **kwargs):
         """
         Given a Mashup service and parameters, builds and excecutes a Mashup query.
         See documentation `here <https://mast.stsci.edu/api/v0/class_mashup_1_1_mashup_request.html>`__
@@ -644,6 +644,9 @@ class MastClass(QueryWithLogin):
             Default None.
             Can be used to override the default behavior of all results being returned to obtain
             a specific page of results.
+        rdm : int, optional
+            Default 42.
+            Can be used to specify random seed number.
         **kwargs :
             See MashupRequest properties
             `here <https://mast.stsci.edu/api/v0/class_mashup_1_1_mashup_request.html>`__
@@ -653,6 +656,9 @@ class MastClass(QueryWithLogin):
         -------
         response : list of `~requests.Response`
         """
+        
+        # setting random seed to obtain the same results next time
+        np.random_seed(rdm)
 
         # setting self._current_service
         if service not in self._column_configs.keys():
